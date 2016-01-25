@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BCA988721C55B24100295931 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA988711C55B24100295931 /* ColorCell.swift */; };
 		BCB919391C48CBE3004040DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB919381C48CBE3004040DD /* AppDelegate.swift */; };
 		BCB9193E1C48CBE3004040DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCB9193C1C48CBE3004040DD /* Main.storyboard */; };
 		BCB919401C48CBE3004040DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCB9193F1C48CBE3004040DD /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		887D81C09C1D668EB60892F1 /* Pods_MovieViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCA988711C55B24100295931 /* ColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		BCB919351C48CBE3004040DD /* MovieViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCB919381C48CBE3004040DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BCB9193D1C48CBE3004040DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 		BCB9194C1C48DB0D004040DD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BCA988711C55B24100295931 /* ColorCell.swift */,
 				BCB9194D1C48DB68004040DD /* MovieCell.swift */,
 			);
 			name = Views;
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BCB919391C48CBE3004040DD /* AppDelegate.swift in Sources */,
+				BCA988721C55B24100295931 /* ColorCell.swift in Sources */,
 				BCB9194B1C48CC99004040DD /* MoviesViewController.swift in Sources */,
 				BCB9194E1C48DB68004040DD /* MovieCell.swift in Sources */,
 			);

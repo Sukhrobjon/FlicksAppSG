@@ -10,12 +10,21 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var movieSearchBar: UISearchBar!
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    
+    
     
     var movies: [NSDictionary]?
-//    var myRequest = [NSURLRequest]?()
+    
+    var filteredMovieData: [NSDictionary]?
+    
+
+
 
     
     override func viewDidLoad() {
@@ -24,6 +33,28 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.dataSource = self
         tableView.delegate = self
+        movieSearchBar.delegate = self
+//        collectionView.delegate = self
+//        collectionView.dataSource = self 
+        
+        
+        
+        
+        // TO DO CollectionView
+        
+        let totalColors: Int = 100
+        func colorForIndexPath(indexPath: NSIndexPath) -> UIColor {
+            if indexPath.row >= totalColors {
+                return UIColor.blackColor()	// return black if we get an unexpected row index
+            }
+            
+            var hueValue: CGFloat = CGFloat(indexPath.row) / CGFloat(totalColors)
+            return UIColor(hue: hueValue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        }
+        
+        
+
+        
         
         
         let refreshControl = UIRefreshControl()
@@ -55,6 +86,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             NSLog("response: \(responseDictionary)")
                             
                             self.movies = (responseDictionary["results"] as! [NSDictionary])
+                            self.filteredMovieData = self.movies
                             self.tableView.reloadData()
                             
                             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
@@ -106,24 +138,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
-        if let movies = movies {
+        if let movies = filteredMovieData {
             return movies.count
-        
-        } else {
+        } else{
             return 0
-        
         }
         
+        return movies!.count
         
-    
     }
     
-    
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
-        
-        let movie = movies![indexPath.row]
+        let movie = filteredMovieData! [indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
         let posterPath = movie["poster_path"] as! String
@@ -144,6 +172,85 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        
+        if searchText.isEmpty {
+            filteredMovieData = movies
+        } else {
+            filteredMovieData = movies?.filter({ (movie: NSDictionary) -> Bool in
+                if let title = movie["title"] as? String {
+                    if title.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil {
+                        
+                        return  true
+                    } else {
+                        
+                        return false
+                    }
+                }
+                return false
+            })
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        
+        self.movieSearchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        filteredMovieData = movies
+        self.tableView.reloadData()
+    }
+  }
+
+
+
+
+//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
+//        
+//        return 20
+//     }
+//
+//   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
+//    
+//    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
+//    let cellColor = filteredMovieData!(indexPath)
+//    cell.backgroundColor = cellColor
+//    
+//    if CGColorGetNumberOfComponents(cellColor.CGColor) == 4 {
+//        let redComponent = CGColorGetComponents(cellColor.CGColor)[0] * 255
+//        let greenComponent = CGColorGetComponents(cellColor.CGColor)[1] * 255
+//        let blueComponent = CGColorGetComponents(cellColor.CGColor)[2] * 255
+//        cell.colorLabel.text = String(format: "%.0f, %.0f, %.0f", redComponent, greenComponent, blueComponent)
+//    }
+//    
+//    return cell
+//}
+
+//    let filteredMovieData = NSDictionary()
+//    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
+//   // let movie = filteredMovies![indexPath.row]
+    //return ColorCell(movies , cell: cell)
+
+//    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionCell", forIndexPath: indexPath) as! MovieCollectionCell
+//    let movie = filteredMovies[indexPath.row]
+//    return movieToCollectionViewCell(movie , cell: cell)
+
+    
+    
+
+    
+//}
+
+
+
 
     /*
     // MARK: - Navigation
@@ -155,4 +262,5 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     */
 
-}
+
+
