@@ -150,21 +150,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         let movie = filteredMovieData! [indexPath.row]
         let title = movie["title"] as! String
-        let overview = movie["overview"] as! String
-        let posterPath = movie["poster_path"] as! String
-        
-        
-        let baseUrl = "http://image.tmdb.org/t/p/w500"
-        
-        let imageUrl = NSURL(string: baseUrl + posterPath)
-        
         cell.titleLabel.text = title
-        cell.overviewLabel.text = overview
-        cell.posterView.setImageWithURL(imageUrl!)
         
+        let overview = movie["overview"] as? String
+        cell.overviewLabel.text = overview
+        let baseUrl = "http://image.tmdb.org/t/p/w500"
+        if let posterPath = movie["poster_path"] as? String {
+        
+        let posterURL = NSURL(string: baseUrl + posterPath)
+        cell.posterView.setImageWithURL(posterURL!)
+        }
         
         
         print("row \(indexPath.row)")
@@ -248,9 +247,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 //    return cell
 //}
 
-//    let filteredMovieData = NSDictionary()
-//    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
-//   // let movie = filteredMovies![indexPath.row]
+
 //return ColorCell(movies , cell: cell)
 
 //    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionCell", forIndexPath: indexPath) as! MovieCollectionCell
