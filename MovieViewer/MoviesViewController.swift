@@ -11,7 +11,7 @@ import AFNetworking
 import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
-
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var movieSearchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -23,9 +23,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     var filteredMovieData: [NSDictionary]?
     
-
-
-
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,8 +34,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.delegate = self
         movieSearchBar.delegate = self
-//        collectionView.delegate = self
-//        collectionView.dataSource = self 
+        //        collectionView.delegate = self
+        //        collectionView.dataSource = self
         
         
         
@@ -53,7 +53,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         
-
+        
         
         
         
@@ -66,9 +66,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         spining.labelText = "Sending"
         spining.detailsLabelText = "Please wait"
         
-
+        
         // Do any additional setup after loading the view.
-    
+        
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
@@ -90,21 +90,21 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                             self.tableView.reloadData()
                             
                             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-//                            let request = NSURLRequest(URL: url!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 10)
+                            //                            let request = NSURLRequest(URL: url!, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 10)
                             
                     }
                 }
         });
         task.resume()
         
-        }
-
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
         
-       
+        
         
     }
     
@@ -148,7 +148,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
-
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
         let movie = filteredMovieData! [indexPath.row]
@@ -208,59 +208,70 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         filteredMovieData = movies
         self.tableView.reloadData()
     }
-  }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let movie = movies![indexPath!.row]
+        
+        let detailViewController = segue.destinationViewController as! DetailViewController
+        
+        detailViewController.movie = movie
+    }
+
+
+}
+
+
 
 
 
 
 //    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-//        
+//
 //        return 20
 //     }
 //
 //   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
-//    
+//
 //    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
 //    let cellColor = filteredMovieData!(indexPath)
 //    cell.backgroundColor = cellColor
-//    
+//
 //    if CGColorGetNumberOfComponents(cellColor.CGColor) == 4 {
 //        let redComponent = CGColorGetComponents(cellColor.CGColor)[0] * 255
 //        let greenComponent = CGColorGetComponents(cellColor.CGColor)[1] * 255
 //        let blueComponent = CGColorGetComponents(cellColor.CGColor)[2] * 255
 //        cell.colorLabel.text = String(format: "%.0f, %.0f, %.0f", redComponent, greenComponent, blueComponent)
 //    }
-//    
+//
 //    return cell
 //}
 
 //    let filteredMovieData = NSDictionary()
 //    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
 //   // let movie = filteredMovies![indexPath.row]
-    //return ColorCell(movies , cell: cell)
+//return ColorCell(movies , cell: cell)
 
 //    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionCell", forIndexPath: indexPath) as! MovieCollectionCell
 //    let movie = filteredMovies[indexPath.row]
 //    return movieToCollectionViewCell(movie , cell: cell)
 
-    
-    
 
-    
+
+
+
 //}
 
 
 
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+// MARK: - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+
 
 
 
