@@ -37,7 +37,7 @@ class DetailViewController: UIViewController {
         overviewLabel.sizeToFit()
         if let posterPath = movie["poster_path"] as? String {
             
-        let posterURL = NSURL(string: baseUrl + posterPath)
+            let posterURL = NSURL(string: baseUrl + posterPath)
             posterView.setImageWithURL(posterURL!)
         }
 

@@ -14,15 +14,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var movieSearchBar: UISearchBar!
-    @IBOutlet weak var collectionView: UICollectionView!
+
     
     
     
     
     var movies: [NSDictionary]?
-    
+    var refreshControl: UIRefreshControl!
     var filteredMovieData: [NSDictionary]?
-    
+    var endpoint: String!
     
     
     
@@ -34,25 +34,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         tableView.delegate = self
         movieSearchBar.delegate = self
-        //        collectionView.delegate = self
-        //        collectionView.dataSource = self
-        
-        
-        
-        
-        // TO DO CollectionView
-        
-        let totalColors: Int = 100
-        func colorForIndexPath(indexPath: NSIndexPath) -> UIColor {
-            if indexPath.row >= totalColors {
-                return UIColor.blackColor()	// return black if we get an unexpected row index
-            }
-            
-            var hueValue: CGFloat = CGFloat(indexPath.row) / CGFloat(totalColors)
-            return UIColor(hue: hueValue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-        }
-        
-        
         
         
         
@@ -62,21 +43,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.insertSubview(refreshControl, atIndex: 0)
         
         
-        let spining = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        spining.labelText = "Sending"
-        spining.detailsLabelText = "Please wait"
         
-        
-        // Do any additional setup after loading the view.
+        // Do any additional setup after loading the view. networkRequest:
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
+        
+        
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
             delegate:nil,
             delegateQueue:NSOperationQueue.mainQueue()
         )
+        
+        let spining = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        spining.labelText = "loading"
+        spining.detailsLabelText = ""
+
         
         let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
@@ -97,12 +81,46 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         });
         task.resume()
         
+        networkRequest()
+        
     }
+    
+    func networkRequest() {
+        
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let url = NSURL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
+        let request = NSURLRequest(URL: url!)
+        let session = NSURLSession(
+            configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+            delegate: nil,
+            delegateQueue: NSOperationQueue.mainQueue()
+        )
+
+        
+    }
+    
+    
     
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        
+//        func networkRequest() {
+//            
+//            let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+//            let url = NSURL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
+//            let request = NSURLRequest(URL: url!)
+//            let session = NSURLSession(
+//                configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
+//                delegate: nil,
+//                delegateQueue: NSOperationQueue.mainQueue()
+//            )
+//            
+//            
+//        }
+//        
+
         
         
         
@@ -135,6 +153,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         });
         task.resume()
     }
+    
+    
+    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
@@ -169,7 +190,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         print("row \(indexPath.row)")
         return cell
     }
-    
     
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -220,7 +240,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
 
 }
-
 
 
 
