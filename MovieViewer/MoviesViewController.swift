@@ -186,6 +186,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWithURL(posterURL!)
         }
         
+        cell.selectionStyle = .None
         
         print("row \(indexPath.row)")
         return cell
@@ -227,57 +228,25 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         filteredMovieData = movies
         self.tableView.reloadData()
     }
+
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
         let cell = sender as! UITableViewCell
+        
         let indexPath = tableView.indexPathForCell(cell)
-        let movie = movies![indexPath!.row]
+        let movies = filteredMovieData![indexPath!.row]
         
         let detailViewController = segue.destinationViewController as! DetailViewController
+        detailViewController.movie = movies
         
-        detailViewController.movie = movie
+        print ("prepare for segue call")
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
     }
-
-
+    
 }
 
 
-
-
-
-//    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
-//
-//        return 20
-//     }
-//
-//   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell{
-//
-//    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("ColorCell", forIndexPath: indexPath) as! ColorCell
-//    let cellColor = filteredMovieData!(indexPath)
-//    cell.backgroundColor = cellColor
-//
-//    if CGColorGetNumberOfComponents(cellColor.CGColor) == 4 {
-//        let redComponent = CGColorGetComponents(cellColor.CGColor)[0] * 255
-//        let greenComponent = CGColorGetComponents(cellColor.CGColor)[1] * 255
-//        let blueComponent = CGColorGetComponents(cellColor.CGColor)[2] * 255
-//        cell.colorLabel.text = String(format: "%.0f, %.0f, %.0f", redComponent, greenComponent, blueComponent)
-//    }
-//
-//    return cell
-//}
-
-
-//return ColorCell(movies , cell: cell)
-
-//    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MovieCollectionCell", forIndexPath: indexPath) as! MovieCollectionCell
-//    let movie = filteredMovies[indexPath.row]
-//    return movieToCollectionViewCell(movie , cell: cell)
-
-
-
-
-
-//}
 
 
 
